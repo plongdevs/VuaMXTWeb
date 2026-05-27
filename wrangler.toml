@@ -1,0 +1,17 @@
+name = "vuamxt-admin"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Environment variables (set these in Cloudflare dashboard or via wrangler secret)
+# ADMIN_PASSWORD = "your_secure_password_here"
+
+# KV namespace for tokens (optional, for persistent storage)
+# [[kv_namespaces]]
+# binding = "TOKENS_KV"
+# id = "your_kv_namespace_id"
+
+# D1 database for users and keys (recommended for production)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "vuamxt_db"
+# database_id = "your_d1_database_id"
