@@ -1,3 +1,0 @@
-# Redirect API calls to Cloudflare Worker
-# Replace with your actual Worker URL
-/api/* https://vuamxt-admin.your-subdomain.workers.dev/api/:splat 200
